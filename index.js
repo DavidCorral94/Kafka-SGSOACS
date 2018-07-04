@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const kafka = require('kafka-node');
 const Producer = kafka.Producer;
 const client = new kafka.Client();
-const producer = new Producer(client);
+//const producer = new Producer(client);
 const Consumer = kafka.Consumer;
 const consumer = new Consumer(client, [{
     topic: 'streams-output',
@@ -37,13 +37,16 @@ app.get('/alerts', function (req, res) {
 
 app.post('/inputs', function (req, res) {
     console.log('Sending message to Kafka: ', req.body.value);
-    let payloads = [
-        {topic: 'streams-input', messages: req.body.value, partition: 0, timestamp: Date.now()}
-    ];
+
+    let client = new kafka.Client(),
+        producer = new Producer(client),
+        payloads = [
+            {topic: 'streams-input', messages: req.body.value, partition: 0, timestamp: Date.now()}
+        ];
+
     producer.on('ready', function () {
         producer.send(payloads, function (err, data) {
             console.log(data);
-            res.send("OK");
         });
     });
 });
@@ -61,7 +64,6 @@ consumer.on('message', function (message) {
     alerts.push(message.value);
     io.emit('newAlert', 'ok');
 });
-
 
 server.listen(PORT, function () {
     console.log('Server with GUI up and running on localhost:' + PORT);
