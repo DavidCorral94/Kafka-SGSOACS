@@ -27,18 +27,16 @@ app.post('/inputs', function (req, res) {
     console.log('Sending message to Kafka: ', req.body.value);
 
     let kafka = require('kafka-node'),
-        Producer = kafka.Producer,
-        KeyedMessage = kafka.KeyedMessage,
+        HighLevelProducer = kafka.HighLevelProducer,
         client = new kafka.Client(),
-        producer = new Producer(client),
-        km = new KeyedMessage('key', 'message'),
+        producer = new HighLevelProducer(client),
         payloads = [
-            {topic: 'streams-input', messages: req.body.value, partition: 0}
+            {topic: 'streams-input', messages: req.body.value, partition: 0, timestamp: Date.now()}
         ];
 
     producer.on('ready', function () {
         producer.send(payloads, function (err, data) {
-            res.send("OK");
+            console.log(data);
         });
     });
 

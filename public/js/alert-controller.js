@@ -1,7 +1,7 @@
 angular.module("AlertListApp").controller("AlertCtrl", function ($scope, $http, $location, $q) {
     $scope.inputs = [];
     $scope.alerts = [];
-    $scope.event = '{ id: 1, eventTypeName: "Temperature", value: 28.9 }';
+    $scope.event = '{ "id": 1, "eventTypeName": "Temperature", "value": 28.9 }';
     $scope.epl = '@NAME("DUMMY") SELECT count(*) from Temperature';
 
     let socket = io();
