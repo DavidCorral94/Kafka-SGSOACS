@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const path = require('path');
-const public = __dirname + "/public/";
 const alerts = [];
 const PORT = process.env.PORT || 8080;
 const bodyParser = require('body-parser');
@@ -13,10 +12,10 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(public + "index.html"));
+    res.sendFile(path.join(__dirname + "/public/" + "index.html"));
 });
 
-app.use('/', express.static(public));
+app.use('/', express.static(__dirname + "/public/"));
 
 
 app.get('/alerts', function (req, res, next) {

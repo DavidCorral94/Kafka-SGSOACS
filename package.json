@@ -4,7 +4,7 @@
   "description": "A demo for SGSOACS 18 using Kafka Streams and NodeJs",
   "main": "index.js",
   "scripts": {
-    "run": "",
+    "start": "node index.js",
     "sass:compile": "node-sass --include-path sass public/materialize/sass/materialize.scss public/css/materialize.css"
   },
   "keywords": [
@@ -18,14 +18,8 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "bower": "^1.8.2",
-    "dotenv": "^6.0.0",
     "express": "^4.16.2",
     "kafka-node": "^2.6.1",
-    "morgan": "^1.9.0",
     "socket.io": "^2.0.4"
-  },
-  "devDependencies": {
-    "node-sass": "^4.9.0"
   }
 }
