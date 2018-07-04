@@ -9,7 +9,6 @@ const bodyParser = require('body-parser');
 const kafka = require('kafka-node');
 const Producer = kafka.Producer;
 const client = new kafka.Client();
-//const producer = new Producer(client);
 const Consumer = kafka.Consumer;
 const consumer = new Consumer(client, [{
     topic: 'streams-output',
