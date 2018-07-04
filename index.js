@@ -6,6 +6,18 @@ const alerts = [];
 const PORT = process.env.PORT || 8080;
 const bodyParser = require('body-parser');
 
+const kafka = require('kafka-node');
+const Producer = kafka.Producer;
+const client = new kafka.Client();
+const producer = new Producer(client);
+const Consumer = kafka.Consumer;
+const consumer = new Consumer(client, [{
+    topic: 'streams-output',
+    partition: 0
+}], {
+    autoCommit: false
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -18,55 +30,39 @@ app.get('/', function (req, res) {
 app.use('/', express.static(__dirname + "/public/"));
 
 
-app.get('/alerts', function (req, res, next) {
-    console.log("Sending " + alerts.length + " Complex Events");
+app.get('/alerts', function (req, res) {
+    console.log('Sending ' + alerts.length + ' Complex Events');
     res.json(alerts);
 });
 
 app.post('/inputs', function (req, res) {
     console.log('Sending message to Kafka: ', req.body.value);
-
-    let kafka = require('kafka-node'),
-        HighLevelProducer = kafka.HighLevelProducer,
-        client = new kafka.Client(),
-        producer = new HighLevelProducer(client),
-        payloads = [
-            {topic: 'streams-input', messages: req.body.value, partition: 0, timestamp: Date.now()}
-        ];
-
+    let payloads = [
+        {topic: 'streams-input', messages: req.body.value, partition: 0, timestamp: Date.now()}
+    ];
     producer.on('ready', function () {
         producer.send(payloads, function (err, data) {
             console.log(data);
+            res.send("OK");
         });
     });
-
 });
 
 const server = http.createServer(app);
 
 const io = require('socket.io').listen(server);
-// Socket configuration
+
 io.sockets.on('connection', (socket) => {
     console.log("User connected");
 });
 
-const kafka = require('kafka-node'),
-    Consumer = kafka.Consumer,
-    client = new kafka.Client(),
-    consumer = new Consumer(client, [{
-        topic: 'streams-output',
-        partition: 0
-    }], {
-        autoCommit: false
-    });
-
 consumer.on('message', function (message) {
-    console.log("*** New complex event received: ", message);
+    console.log(' New complex event received: ', message);
     alerts.push(message.value);
     io.emit('newAlert', 'ok');
 });
 
 
 server.listen(PORT, function () {
-    console.log("Server with GUI up and running on localhost:" + PORT);
+    console.log('Server with GUI up and running on localhost:' + PORT);
 });
