@@ -45,6 +45,11 @@ app.post('/inputs', function (req, res) {
 
     producer.on('ready', function () {
         producer.send(payloads, function (err, data) {
+            if(err)
+                res.status(500).send('Something broke!');
+            else
+                res.send(data);
+
             console.log(data);
         });
     });
@@ -59,7 +64,7 @@ io.sockets.on('connection', (socket) => {
 });
 
 consumer.on('message', function (message) {
-    console.log(' New complex event received: ', message);
+    console.log('New complex event received: ', message.value);
     alerts.push(message.value);
     io.emit('newAlert', 'ok');
 });

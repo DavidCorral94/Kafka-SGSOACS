@@ -51,7 +51,7 @@
         </div>
         <div class="col s4">
             <h4>Processing</h4>
-            <div class="card blue-grey darken-1" ng-repeat="input in inputs track by $index">
+            <div class="card blue-grey darken-1" ng-repeat="input in inputs | orderBy:'+': true track by $index">
                 <div class="card-content white-text">
                     <span class="card-title">{{input.type}}</span>
                     <p>{{input.value}}</p>
@@ -71,95 +71,3 @@
 </div>
 </body>
 </html>
-<!--
-<div class="row">
-    <div class="alert alert-success" role="alert"><b>¡Bienvenido!</b> A continuación verá una lista de las diversas
-        alertas detectadas ordenadas de más a menos reciente
-    </div>
-    <div ng-repeat="item in items | orderBy:'-Anomalia_Contador.timestamp'">
-        <div class="col-xs-12 col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-image text-center">
-                    <img class="panel-image-preview" src="/img/water.png"/>
-                </div>
-                <div class="panel-body">
-                    <h4>
-                        <b>
-                            {{item.Anomalia_Contador.anomalia}}
-                        </b>
-                    </h4>
-                    <p>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <b>
-                                Nº de serie:
-                            </b>
-                            {{item.Anomalia_Contador.numSerie}}
-                        </li>
-                        <li class="list-group-item">
-                            <b>
-                                Detectado:
-                            </b>
-                            {{item.Anomalia_Contador.timestamp | date:'dd-MM-yyyy HH:mm:ss'}}
-                        </li>
-                        <li class="list-group-item">
-                            <b>
-                                Tipo:
-                            </b>
-                            {{item.Anomalia_Contador.tipo}}
-                        </li>
-                        <li class="list-group-item">
-                            <b>
-                                Tiempo Dormido (s):
-                            </b>
-                            {{item.Anomalia_Contador.tiempoDormido}}
-                        </li>
-                        <li class="list-group-item">
-                            <b>
-                                Tiempo Normal (s):
-                            </b>
-                            {{item.Anomalia_Contador.tiempoNormal}}
-                        </li>
-                        <li class="list-group-item">
-                            <b>
-                                Tiempo Fuga (s):
-                            </b>
-                            {{item.Anomalia_Contador.tiempoFuga}}
-                        </li>
-                        <li class="list-group-item">
-                            <b>
-                                Volumen (l):
-                            </b>
-                            {{item.Anomalia_Contador.volumenL}}
-                        </li>
-                        <li class="list-group-item">
-                            <b>
-                                Volumen (m3):
-                            </b>
-                            {{item.Anomalia_Contador.volumenM3}}
-                        </li>
-                        <li class="list-group-item">
-                            <b>
-                                Nivel de batería:
-                            </b>
-                            {{item.Anomalia_Contador.nivelBateriaStr}} ({{item.Anomalia_Contador.nivelBateria}})
-                        </li>
-                    </ul>
-                    </p>
-                </div>
-                <div class="panel-footer text-center">
-                    <a href="#email">
-                            <span class="fa fa-envelope">
-                            </span>
-                    </a>
-                    <a href="#phone">
-                            <span class="fa fa-phone">
-                            </span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-</body>-->

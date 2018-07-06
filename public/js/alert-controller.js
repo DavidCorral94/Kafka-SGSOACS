@@ -2,12 +2,13 @@ angular.module("AlertListApp").controller("AlertCtrl", function ($scope, $http, 
     $scope.inputs = [];
     $scope.alerts = [];
     $scope.event = '{ "id": 1, "eventTypeName": "Temperature", "value": 28.9 }';
-    $scope.epl = '@NAME("DUMMY") SELECT count(*) from Temperature';
+    $scope.epl = '@NAME("Count-5") SELECT count(*) from Temperature#length_batch(5)';
 
     let socket = io();
     socket.on('connect', function () {
         console.log("Connected to socket: " + socket.id);
     });
+
     socket.on('newAlert', function (data) {
         updateAlertList();
     });
@@ -40,15 +41,22 @@ angular.module("AlertListApp").controller("AlertCtrl", function ($scope, $http, 
     }
 
     function postInput(input) {
-        $http.post("/inputs", input).then(function () {
-            console.log('Event/EPL sent to Kafka')
-        });
+        $http.post("/inputs", input)
+            .then(function (response) {
+                console.log('Event/EPL sent to Kafka: ', response);
+            }, function (error) {
+                console.log('Error sending Event/EPL to Kafka: ', error);
+            });
     }
 
     function updateAlertList() {
-        $http.get("/alerts").then(function (response) {
-            $scope.alerts = response.data;
-        });
+        $http.get("/alerts")
+            .then(function (response) {
+                console.log('Alerts detected: ', response);
+                $scope.alerts = response.data.reverse();
+            }, function (error) {
+                console.log('Error retrieving alerts: ', error);
+            });
     }
 
     $scope.refresh = function () {
